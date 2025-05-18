@@ -1,0 +1,22 @@
+.chatContainer {
+  flex: 1;
+  background: #fff;
+  padding: 32px 0 16px 0;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  max-height: calc(100vh - 72px - 120px);
+  min-height: 200px;
+  scrollbar-width: thin;
+  scrollbar-color: #2563eb #f3f6fa;
+}
+
+.chatContainer::-webkit-scrollbar {
+  width: 8px;
+}
+
+.chatContainer::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, #38BDF8 0%, #8B5CF6 100%);
+  border-radius: 8px;
+}

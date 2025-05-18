@@ -1,0 +1,25 @@
+.suggestionRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  justify-content: flex-start;
+  padding: 16px 24px 0 24px;
+  background: #fff;
+}
+
+.suggestionBtn {
+  background: transparent;
+  color: #000;
+  border-radius: 999px;
+  padding: 10px 24px;
+  font-size: 15px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: box-shadow 0.2s, border-color 0.2s;
+  margin-bottom: 8px;
+}
+
+.suggestionBtn:hover {
+  box-shadow: 0 0 16px #38BDF8, 0 0 32px #8B5CF6;
+  border-color: #8B5CF6;
+}
