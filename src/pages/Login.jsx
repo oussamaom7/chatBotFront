@@ -19,7 +19,7 @@ export default function Login() {
     // Login (fake/demo)
     const success = login({ email, password });
     if (success) {
-      navigate('/');
+      navigate('/chat');
     } else {
       setError('Invalid credentials');
     }
