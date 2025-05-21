@@ -1,4 +1,5 @@
 import React, { useState, useContext } from 'react';
+import axios from 'axios';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import Header from './components/Header';
 import ChatContainer from './components/ChatContainer';
@@ -13,17 +14,35 @@ function ChatbotUI() {
   const [messages, setMessages] = useState([
     { sender: 'bot', text: 'Hi! I am CareerBot. How can I help you today?' },
   ]);
+  const [isBotTyping, setIsBotTyping] = useState(false);
 
-  const handleSend = (text) => {
-    setMessages([...messages, { sender: 'user', text }]);
-    setTimeout(() => {
-      setMessages(msgs => [...msgs, { sender: 'bot', text: "I'm here to assist you with your career!" }]);
-    }, 600);
+  const handleSend = async (text) => {
+    setMessages(prev => [...prev, { sender: 'user', text }]);
+    setIsBotTyping(true);
+    try {
+      const response = await axios.post('http://localhost:8081/chat', { question: text });
+      const data = response.data;
+      setMessages(prev => [
+        ...prev.filter(m => m.sender !== 'typing'),
+        { sender: 'bot', text: data.answer || data }
+      ]);
+    } catch (error) {
+      setMessages(prev => [
+        ...prev.filter(m => m.sender !== 'typing'),
+        { sender: 'bot', text: 'Sorry, there was a problem connecting to the server.' }
+      ]);
+    } finally {
+      setIsBotTyping(false);
+    }
   };
 
   const handleSuggestion = (suggestion) => {
     handleSend(suggestion);
   };
+
+  const displayMessages = isBotTyping
+    ? [...messages, { sender: 'typing', text: '...' }]
+    : messages;
 
   return (
     <main style={{
@@ -33,7 +52,7 @@ function ChatbotUI() {
       minHeight: 0,
       overflow: 'hidden',
     }}>
-      <ChatContainer messages={messages} />
+      <ChatContainer messages={displayMessages} />
       <SuggestionRow onSuggestion={handleSuggestion} />
       <ChatInput onSend={handleSend} />
     </main>
@@ -50,7 +69,7 @@ const MainLayout = ({ children }) => (
 );
 
 function HomePage() {
-  // const { isAuthenticated } = useContext(AuthContext);
+  
   return (
     <MainLayout>
       <ChatbotUI />
@@ -59,7 +78,7 @@ function HomePage() {
 }
 
 function ChatPage() {
-  // const { isAuthenticated } = useContext(AuthContext);
+ 
   return (
     <MainLayout>
       <ChatbotUI />
@@ -98,7 +117,7 @@ export const router = createBrowserRouter(routes, {
 });
 
 function App() {
-  return null; // App is now handled by RouterProvider in main.jsx
+  return null; 
 }
 
 export default App
